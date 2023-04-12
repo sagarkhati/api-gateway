@@ -16,6 +16,11 @@ public class ApiGatewayConfiguration {
 						.uri("http://httpbin.org:80"))
 				.route(p -> p.path("/currency-exchange/**").uri("lb://currency-exchange-service"))
 				.route(p -> p.path("/currency-converter/**").uri("lb://currency-conversion-service"))
-				.route(p -> p.path("/currency-converter-feign/**").uri("lb://currency-conversion-service")).build();
+				.route(p -> p.path("/currency-converter-feign/**").uri("lb://currency-conversion-service"))
+				.route(p -> p.path("/currency-converter-new/**")
+						.filters(f -> f.rewritePath("/currency-converter-new/(?<segment>.*)",
+								"/currency-converter-feign/${segment}"))
+						.uri("lb://currency-conversion-service"))
+				.build();
 	}
 }
